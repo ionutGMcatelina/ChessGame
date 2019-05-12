@@ -27,11 +27,19 @@ public abstract class Chessman {
         return nume;
     }
 
-    public void setNume(String nume) {
+    void setNume(String nume) {
         this.nume = nume;
     }
 
-    protected boolean swap(int x, int y){
+    /**
+     * Muta piesa pe o pozitie noua. Practic mutarea se face printr-un swap
+     * intre piesa curenta si una goala, iar daca pe pozitia viitoare este o piesa
+     * adversa, aceasta va fi stearsa de pe tabla.
+     * @param x Linia pe care va fi mutata.
+     * @param y Coloana pe care va fi mutata.
+     * @return True daca s-a putut face mutarea, false in caz contrar.
+     */
+    boolean swap(int x, int y){
         if (!tabla[x][y].getColor().equals(color)) {
             if (x <= 7 && y <= 7) {
                 if (!tabla[x][y].getColor().equals("gol")){
@@ -63,6 +71,11 @@ public abstract class Chessman {
         }
     }
 
+    /**
+     * Muta piesa pe o pozitie anterioara.
+     * @param x Va fi linia pe care a fost piesa.
+     * @param y Va fi coloana pe care a fost piesa.
+     */
     public void swapBack(int x, int y){
         Chessman aux;
         aux = tabla[x][y];
@@ -99,29 +112,6 @@ public abstract class Chessman {
 
     public void setY(int y) {
         this.y = y;
-    }
-
-    public static void printTabla(){
-        System.out.print("   ");
-        for (int i = 0; i < 8; i++){
-            System.out.print("     " + i + "     ");
-        }
-        System.out.println();
-        int k = 0;
-        for (Chessman[] p : tabla){
-            System.out.println("   -----------------------------------------------------------------------------------------");
-            System.out.print(k + "  ");
-            for (Chessman ps : p){
-                System.out.print("| " + ps + "  ");
-            }
-            System.out.println("|");
-            k++;
-        }
-        System.out.println("   -----------------------------------------------------------------------------------------");
-        System.out.println("Piese albe scoase:");
-        System.out.println(pieseAlbe);
-        System.out.println("Piese negre scoase: ");
-        System.out.println(pieseNegre);
     }
 
     public static ArrayList<Chessman> getPieseAlbe() {

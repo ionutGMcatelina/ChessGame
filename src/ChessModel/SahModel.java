@@ -1,7 +1,8 @@
 package ChessModel;
 
-import java.util.Scanner;
-
+/**
+ * Clasa pentru initializarea si resetarea tablei de sah.
+ */
 public class SahModel {
 
     public SahModel(){

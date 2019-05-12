@@ -1,5 +1,10 @@
 package ChessModel;
 
+/**
+ * Reprezinta Regina.
+ * In aceasta clasa sunt functiile din clasa Bishop si Rook deoarece regina poate merge si pe
+ * diagonala si pe linie sau coloana.
+ */
 public class Queen extends Chessman {
     public Queen(String color, int x, int y){
         super(color, x, y);
@@ -82,6 +87,12 @@ public class Queen extends Chessman {
         return true;
     }
 
+    /**
+     * Muta piesa pe o alta pozitie.
+     * @param x Linia pe care va fi mutat.
+     * @param y Coloana pe care va fi mutat.
+     * @return True daca s-a putut face mutarea, false in caz contrar.
+     */
     @Override
     public boolean move(int x, int y) {
         if ((x == getX() && freeY(x, y)) || (y == getY() && freeX(x, y))) {

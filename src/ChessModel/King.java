@@ -18,6 +18,17 @@ public class King extends Chessman{
         setNume( "\u265A");
     }
 
+    /**
+     * Verifica daca o anumita pozitie de pe tabla este amenintata.
+     * Se iau toate pozitiile din care se poate ajunce pe acest patrat si se verifica daca este o piesa care sa ajunga
+     * aici. De exemplu pentru Queen si pentru Bishop se merge pe diagonalele din care face parte patratul, iar pentru
+     * Rook si tot pentru Queen se perge pe linie si pe coloana.
+     * @param x Linia pe care se afla patratul.
+     * @param y Coloana pe care se afla patratul.
+     * @param color Culoarea regelui pentru care se face verificarea.
+     * @param gol Boolean folosit pentru a lua cazul in care patratul trebuie sa fie gol sau nu.
+     * @return True daca patratul este amenintat de o piesa adversa, false in caz contrar.
+     */
     public boolean chess(int x, int y, String color, boolean gol) {
         try {
             if (Chessman.tabla[x][y].getColor().equals("gol") || !gol) {
@@ -289,6 +300,15 @@ public class King extends Chessman{
         return true;
     }
 
+    /**
+     * Verifica daca este sah mat, adica daca toate casutele unde s-ar putea muta regele sunt in sah si daca nu se
+     * poate pune nimic in calea piesei care ameninta (ex. pe diagonala intre regina adversa si rege).
+     * @param x Linia pe care se afla regele.
+     * @param y Coloana pe care se afla regele.
+     * @param color Culoarea regelui.
+     * @return True daca este sah mat, false in caz contrar.
+     */
+
     public boolean checkmate(int x, int y, String color){
         if (chess(x, y, color, false)){
             int threatX = this.threatX;
@@ -389,6 +409,13 @@ public class King extends Chessman{
         return false;
     }
 
+    /**
+     * Muta piesa pe o alta pozitie. Metoda verifica si daca se poate face rocada,
+     * adica daca regele si tura au fost mutate si daca a fost aleasa pozitia buna.
+     * @param x Linia pe care va fi mutat.
+     * @param y Coloana pe care va fi mutat.
+     * @return True daca s-a putut face mutarea, false in caz contrar.
+     */
     @Override
     public boolean move(int x, int y) {
         if (!chess(x, y, getColor(), false)) {
