@@ -5,7 +5,10 @@ import ChessModel.SahModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class SahController {
+/**
+ * Clasa care face legatura intre interfata grafica si functionalitate.
+ */
+class SahController {
     private SahView m_view;
     private SahModel m_model;
     private int [] poz = new int[2];
@@ -21,7 +24,7 @@ public class SahController {
     private int previousMoveY;
     private Chessman lastPiece;
 
-    public SahController(SahModel m_model, SahView m_view, SettingsView settingsView){
+    SahController(SahModel m_model, SahView m_view, SettingsView settingsView){
         this.m_model = m_model;
         this.m_view = m_view;
         this.settingsView = settingsView;
@@ -45,16 +48,23 @@ public class SahController {
         private int i;
         private int j;
 
-        public ButtonListener(int i, int j){
+        ButtonListener(int i, int j){
             this.i = i;
             this.j = j;
         }
 
+        /**
+         * Ascultator pentru apasarea unui buton de pe dabla de sah.
+         */
         public void actionPerformed(ActionEvent e){
             if (!gameOver) {
                 boolean ok = false;
                 outA = false;
                 outB = false;
+                /*verific daca s-a retinut pozitia anterioara
+                * daca nu, retin pozitia pe care s-a apasat in acest moment(daca nu este goala)
+                * daca da, incerc sa fac swap intre piesa pe care am ales-o anterior si cea selectata acum
+                * */
                 if (poz[0] == -1) {
                     if (mutari % 2 == 0 && Chessman.tabla[i][j].getColor().equals("white") ||
                             mutari % 2 != 0 && Chessman.tabla[i][j].getColor().equals("black")) {
@@ -106,6 +116,9 @@ public class SahController {
                             }
                         }
 
+                        /*
+                        * daca dupa mutare este sah(regele este amenintat) mut piesa inapoi
+                        * daca este sah mat, anunt castigatorul*/
                         if (((King)Chessman.tabla[opKingX][opKingY]).chess(opKingX, opKingY, Chessman.tabla[opKingX][opKingY].getColor(), false)){
                             ok = false;
                             System.out.println(opKingX + " " + opKingY + ", " + i + " " + j);
@@ -139,7 +152,13 @@ public class SahController {
                     } catch (Exception ex){
                         System.out.println("Exception");
                     }
+                    /*
+                    * tot ce am facut aici a fost pe tabla din spate (matricea de butoane)
+                    * acum daca nu a fost sah, inversez piesele si pe interfata
+                    * in functie de variabila 'mutari' aleg ce piesa trebuie mutata (alba sau neagra)*/
                     if (ok){
+                        // daca se face rocada, mut si tura
+                        // rocada se face doar daca nici regele si nici tura nu au mai fost mutate inainte
                         if (Chessman.tabla[i][j].getNume().equals("\u265A") && ((King) Chessman.tabla[i][j]).isCastling()) {
                             if (i == 0 || i == 7) {
                                 if (j == 2) {
