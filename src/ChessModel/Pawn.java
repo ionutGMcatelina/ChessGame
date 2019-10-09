@@ -1,40 +1,32 @@
 package ChessModel;
 
 public class Pawn extends Chessman{
-
-    protected Pawn(String color, int x, int y){
+    Pawn(String color, int x, int y){
         super(color, x, y);
-        setNume( "\u265F");
+        setName( "\u265F");
     }
 
     /**
-     * Muta piesa pe o alta pozitie.
-     * @param x Linia pe care va fi mutat.
-     * @param y Coloana pe care va fi mutat.
-     * @return True daca s-a putut face mutarea, false in caz contrar.
+     * It checks if the square in front is free or
+     * it checks if there's an enemy in the right-front or left-front position.
      */
+
     @Override
     public boolean move(int x, int y) {
         if (getColor().equals("black")) {
             if ((x == getX() + 1 && y == getY() + 1 || x == getX() + 1 && y == getY() - 1)
-                     && tabla[x][y].getColor().equals("white")){
-                if (swap(x, y))
-                    return true;
-                return false;
+                     && table[x][y].getColor().equals("white")){
+                return swap(x, y);
             }
             else {
-                if (Chessman.tabla[x][y].getColor().equals("gol")) {
+                if (Chessman.table[x][y].getColor().equals("empty")) {
                     if (getX() == 1) {
                         if (y == getY() && (x - getX() <= 2 && x - getX() >= 0)) {
-                            if (swap(x, y))
-                                return true;
-                            return false;
+                            return swap(x, y);
                         }
                     } else {
                         if (y == getY() && (x - getX() <= 1 && x - getX() >= 0)) {
-                            if (swap(x, y))
-                                return true;
-                            return false;
+                            return swap(x, y);
                         }
                     }
                 }
@@ -42,24 +34,18 @@ public class Pawn extends Chessman{
         }
         else if (getColor().equals("white")) {
             if ((x == getX() - 1 && y == getY() + 1 || x == getX() - 1 && y == getY() - 1)
-                    && tabla[x][y].getColor().equals("black")){
-                if (swap(x, y))
-                    return true;
-                return false;
+                    && table[x][y].getColor().equals("black")){
+                return swap(x, y);
             }
             else {
-                if (Chessman.tabla[x][y].getColor().equals("gol")) {
+                if (Chessman.table[x][y].getColor().equals("empty")) {
                     if (getX() == 6) {
                         if (y == getY() && (getX() - x <= 2 && getX() - x >= 0)) {
-                            if (swap(x, y))
-                                return true;
-                            return false;
+                            return swap(x, y);
                         }
                     } else {
                         if (y == getY() && (getX() - x <= 1 && getX() - x >= 0)) {
-                            if (swap(x, y))
-                                return true;
-                            return false;
+                            return swap(x, y);
                         }
                     }
                 }
