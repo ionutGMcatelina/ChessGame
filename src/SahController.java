@@ -6,18 +6,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Clasa care face legatura intre interfata grafica si functionalitate.
+ * This class makes connection between GUI and internal functionality
+ * IMPORTANT:
+ * there are two tables: - the backward table made of Chessman objects
+ *                       - the forward table made of buttons
  */
 class SahController {
     private SahView m_view;
     private SahModel m_model;
     private int [] poz = new int[2];
-    private int mutari;
+    private int moves;
     private boolean gameOver = false;
     private SettingsView settingsView;
 
-    private boolean outA;
-    private boolean outB;
     private int currentMoveX;
     private int currentMoveY;
     private int previousMoveX;
@@ -30,7 +31,7 @@ class SahController {
         this.settingsView = settingsView;
         poz[0] = -1;
         poz[1] = -1;
-        mutari = 0;
+        moves = 0;
 
         settingsView.addBackgroundListener(new BackgroundListener());
 
@@ -54,31 +55,34 @@ class SahController {
         }
 
         /**
-         * Ascultator pentru apasarea unui buton de pe dabla de sah.
+         * Listener for the buttons on the chess table
          */
         public void actionPerformed(ActionEvent e){
             if (!gameOver) {
+                boolean outA;
+                boolean outB;
                 boolean ok = false;
                 outA = false;
                 outB = false;
-                /*verific daca s-a retinut pozitia anterioara
-                * daca nu, retin pozitia pe care s-a apasat in acest moment(daca nu este goala)
-                * daca da, incerc sa fac swap intre piesa pe care am ales-o anterior si cea selectata acum
+                /*
+                * If the previous move wasn't stored it will store the position of the pressed button (if isn't empty)
+                * Otherwise, it swaps the button pressed now with the one pressed before (it will swap the text) if
+                * this is possible.
                 * */
                 if (poz[0] == -1) {
-                    if (mutari % 2 == 0 && Chessman.tabla[i][j].getColor().equals("white") ||
-                            mutari % 2 != 0 && Chessman.tabla[i][j].getColor().equals("black")) {
+                    if (moves % 2 == 0 && Chessman.table[i][j].getColor().equals("white") ||
+                            moves % 2 != 0 && Chessman.table[i][j].getColor().equals("black")) {
                         poz[0] = i;
                         poz[1] = j;
                     }
                 } else {
-                    int sizeA = Chessman.getPieseAlbe().size();
-                    int sizeB = Chessman.getPieseNegre().size();
-                    if (Chessman.tabla[poz[0]][poz[1]].move(i, j)) {
-                        if (Chessman.getPieseAlbe().size() != sizeA){
+                    int sizeA = Chessman.getWhitePieces().size();
+                    int sizeB = Chessman.getBlackPieces().size();
+                    if (Chessman.table[poz[0]][poz[1]].move(i, j)) {
+                        if (Chessman.getWhitePieces().size() != sizeA){
                             outA = true;
                         }
-                        if (Chessman.getPieseNegre().size() != sizeB){
+                        if (Chessman.getBlackPieces().size() != sizeB){
                             outB = true;
                         }
 
@@ -90,13 +94,13 @@ class SahController {
                         int kingX = -1, kingY = -1;
                         int opKingX = -1, opKingY = -1;
 
-                        if (Chessman.tabla[i][j].getColor().equals("white")){
+                        if (Chessman.table[i][j].getColor().equals("white")){
                             for (int m = 0; m < 8; m++){
                                 for (int n = 0; n < 8; n++){
-                                    if (Chessman.tabla[m][n].getNume().equals("\u265A") && Chessman.tabla[m][n].getColor().equals("black")){
+                                    if (Chessman.table[m][n].getName().equals("\u265A") && Chessman.table[m][n].getColor().equals("black")){
                                         kingX = m;
                                         kingY = n;
-                                    } else if (Chessman.tabla[m][n].getNume().equals("\u265A") && Chessman.tabla[m][n].getColor().equals("white")){
+                                    } else if (Chessman.table[m][n].getName().equals("\u265A") && Chessman.table[m][n].getColor().equals("white")){
                                         opKingX = m;
                                         opKingY = n;
                                     }
@@ -105,10 +109,10 @@ class SahController {
                         } else {
                             for (int m = 0; m < 8; m++){
                                 for (int n = 0; n < 8; n++){
-                                    if (Chessman.tabla[m][n].getNume().equals("\u265A") && Chessman.tabla[m][n].getColor().equals("white")){
+                                    if (Chessman.table[m][n].getName().equals("\u265A") && Chessman.table[m][n].getColor().equals("white")){
                                         kingX = m;
                                         kingY = n;
-                                    } else if (Chessman.tabla[m][n].getNume().equals("\u265A") && Chessman.tabla[m][n].getColor().equals("black")){
+                                    } else if (Chessman.table[m][n].getName().equals("\u265A") && Chessman.table[m][n].getColor().equals("black")){
                                         opKingX = m;
                                         opKingY = n;
                                     }
@@ -117,30 +121,29 @@ class SahController {
                         }
 
                         /*
-                        * daca dupa mutare este sah(regele este amenintat) mut piesa inapoi
-                        * daca este sah mat, anunt castigatorul*/
-                        if (((King)Chessman.tabla[opKingX][opKingY]).chess(opKingX, opKingY, Chessman.tabla[opKingX][opKingY].getColor(), false)){
+                        * If it is chess after a move, that piece will be moved back.
+                        * In case of checkmate, the game is over and the winner will be displayed.*/
+                        if (((King)Chessman.table[opKingX][opKingY]).chess(opKingX, opKingY, Chessman.table[opKingX][opKingY].getColor(), false)){
                             ok = false;
                             System.out.println(opKingX + " " + opKingY + ", " + i + " " + j);
-                            Chessman.tabla[i][j].swapBack(poz[0], poz[1]);
+                            Chessman.table[i][j].swapBack(poz[0], poz[1]);
 
                             Chessman pieceA;
                             Chessman pieceB;
                             if (outA){
-                                pieceA = Chessman.getPieseAlbe().get(Chessman.getPieseAlbe().size() - 1);
-                                Chessman.getPieseAlbe().remove(Chessman.getPieseAlbe().size() - 1);
-                                Chessman.tabla[pieceA.getX()][pieceA.getY()] = pieceA;
+                                pieceA = Chessman.getWhitePieces().get(Chessman.getWhitePieces().size() - 1);
+                                Chessman.getWhitePieces().remove(pieceA);
+                                Chessman.table[pieceA.getX()][pieceA.getY()] = pieceA;
                             }
                             if (outB){
-
-                                pieceB = Chessman.getPieseNegre().get(Chessman.getPieseNegre().size() - 1);
-                                Chessman.getPieseNegre().remove(Chessman.getPieseNegre().size() - 1);
+                                pieceB = Chessman.getBlackPieces().get(Chessman.getBlackPieces().size() - 1);
+                                Chessman.getBlackPieces().remove(pieceB);
                                 System.out.println(pieceB.getX() + " " + pieceB.getY());
-                                Chessman.tabla[pieceB.getX()][pieceB.getY()] = pieceB;
+                                Chessman.table[pieceB.getX()][pieceB.getY()] = pieceB;
                             }
                         } else {
-                            if (((King) Chessman.tabla[kingX][kingY]).checkmate(kingX, kingY, Chessman.tabla[kingX][kingY].getColor())) {
-                                if (Chessman.tabla[kingX][kingY].getColor().equals("white")) {
+                            if (((King) Chessman.table[kingX][kingY]).checkmate(kingX, kingY, Chessman.table[kingX][kingY].getColor())) {
+                                if (Chessman.table[kingX][kingY].getColor().equals("white")) {
                                     m_view.setWinner("CHECKMATE, black won");
                                     gameOver = true;
                                 } else {
@@ -153,13 +156,12 @@ class SahController {
                         System.out.println("Exception");
                     }
                     /*
-                    * tot ce am facut aici a fost pe tabla din spate (matricea de butoane)
-                    * acum daca nu a fost sah, inversez piesele si pe interfata
-                    * in functie de variabila 'mutari' aleg ce piesa trebuie mutata (alba sau neagra)*/
+                    * If the move is ok, the piece will be moved on the forward table
+                    * The 'moves' variable is used to know the turns (white or black)*/
                     if (ok){
-                        // daca se face rocada, mut si tura
-                        // rocada se face doar daca nici regele si nici tura nu au mai fost mutate inainte
-                        if (Chessman.tabla[i][j].getNume().equals("\u265A") && ((King) Chessman.tabla[i][j]).isCastling()) {
+                        // In case of castling, it will move the Rook
+                        // The castling is possible just if the Rook and the Queen weren't moved before
+                        if (Chessman.table[i][j].getName().equals("\u265A") && ((King) Chessman.table[i][j]).isCastling()) {
                             if (i == 0 || i == 7) {
                                 if (j == 2) {
                                     m_view.swapButtons(poz[0], poz[1] - 4, i, j + 1);
@@ -171,8 +173,8 @@ class SahController {
                         }
 
                         m_view.swapButtons(poz[0], poz[1], i, j);
-                        mutari++;
-                        if (mutari % 2 == 0){
+                        moves++;
+                        if (moves % 2 == 0){
                             m_view.setTitle("WHITE TURN");
                         } else{
                             m_view.setTitle("BLACK TURN");
@@ -182,7 +184,7 @@ class SahController {
                         previousMoveY = poz[1];
                         currentMoveX = i;
                         currentMoveY = j;
-                        lastPiece = Chessman.tabla[i][j];
+                        lastPiece = Chessman.table[i][j];
                     }
                     poz[0] = -1;
                     poz[1] = -1;
@@ -195,7 +197,7 @@ class SahController {
         public void actionPerformed(ActionEvent e){
             m_view.reset();
             m_model.reset();
-            mutari = 0;
+            moves = 0;
             gameOver = false;
         }
     }
@@ -218,8 +220,8 @@ class SahController {
         public void actionPerformed(ActionEvent e){
             lastPiece.swapBack(previousMoveX, previousMoveY);
             m_view.swapButtons(currentMoveX, currentMoveY, previousMoveX, previousMoveY);
-            mutari--;
-            if (mutari % 2 == 0){
+            moves--;
+            if (moves % 2 == 0){
                 m_view.setTitle("WHITE TURN");
             } else{
                 m_view.setTitle("BLACK TURN");
