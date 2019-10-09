@@ -4,6 +4,7 @@ import javax.swing.border.BevelBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.util.Collections;
 
 /**
  * Here is the graphical user interface.
@@ -19,15 +20,16 @@ public class SahView extends JFrame{
     private JButton m_undo = new JButton("  UNDO  ");
     private JButton m_settings = new JButton("  SETTINGS  ");
     private JLabel title = new JLabel("CHESS");
-    private JLabel whitePlayer = new JLabel("WHITE PLAYER");
-    private JLabel blackPlayer = new JLabel("BLACK PLAYER");
     private JLabel winner = new JLabel("PLAYING");
     private JLabel white = new JLabel();
     private JLabel black = new JLabel();
     private SettingsView settingsView;
     private BackgroundPanel bigContent = new BackgroundPanel();
 
-    public SahView(SettingsView settingsView){
+    SahView(SettingsView settingsView){
+        JLabel whitePlayer = new JLabel("WHITE PLAYER");
+        JLabel blackPlayer = new JLabel("BLACK PLAYER");
+
         this.settingsView = settingsView;
 
         winner.setFont(new Font( "Serif", Font.PLAIN, 30));
@@ -57,13 +59,13 @@ public class SahView extends JFrame{
                 else{
                     m_buttons[i][j].setBackground(new Color(205,133,63));
                 }
-                if (Chessman.tabla[i][j].getColor().equals("white")) {
+                if (Chessman.table[i][j].getColor().equals("white")) {
                     m_buttons[i][j].setForeground(Color.WHITE);
                 }
                 else{
                     m_buttons[i][j].setForeground(Color.BLACK);
                 }
-                m_buttons[i][j].setText(Chessman.tabla[i][j].getNume());
+                m_buttons[i][j].setText(Chessman.table[i][j].getName());
             }
         }
 
@@ -168,6 +170,7 @@ public class SahView extends JFrame{
             }
             BufferedImage buffImg = new BufferedImage(1400, 800, BufferedImage.TYPE_INT_ARGB);
             Graphics2D g2d = buffImg.createGraphics();
+            assert image != null;
             g2d.drawImage(image.getImage(), 0, 0, 1400, 800, null);
             bigContent.setImg(buffImg);
             bigContent.paintImmediately(0, 0, 1400, 800);
@@ -178,50 +181,36 @@ public class SahView extends JFrame{
         }
     }
 
-    void setSquaresColor(String sColor1, String sColor2){
-        Color color1 = new Color(205,133,63);
-        switch (sColor1){
-            case "DARK GREY": color1 = Color.DARK_GRAY;
+    private Color makeColor(String sColor){
+        Color color = new Color(205,133,63);
+        switch (sColor){
+            case "DARK GREY": color = Color.DARK_GRAY;
                 break;
-            case "LIGHT GREY": color1 = Color.LIGHT_GRAY;
+            case "LIGHT GREY": color = Color.LIGHT_GRAY;
                 break;
-            case "BEIGE": color1 = new Color(205,133,63);
+            case "BEIGE": color = new Color(205,133,63);
                 break;
-            case  "BROWN": color1 = new Color(165,42,42);
+            case  "BROWN": color = new Color(165,42,42);
                 break;
-            case "RED":  color1 = Color.RED;
+            case "RED":  color = Color.RED;
                 break;
-            case "YELLOW": color1 = Color.YELLOW;
+            case "YELLOW": color = Color.YELLOW;
                 break;
-            case "BLUE": color1 = Color.BLUE;
+            case "BLUE": color = Color.BLUE;
                 break;
-            case "BLACK": color1 = Color.BLACK;
+            case "BLACK": color = Color.BLACK;
                 break;
-            case "WHITE": color1 = Color.WHITE;
+            case "WHITE": color = Color.WHITE;
                 break;
         }
 
-        Color color2 = new Color(205,133,63);
-        switch (sColor2){
-            case "DARK GREY": color2 = Color.DARK_GRAY;
-                break;
-            case "LIGHT GREY": color2 = Color.LIGHT_GRAY;
-                break;
-            case "BEIGE": color2 = new Color(205,133,63);
-                break;
-            case  "BROWN": color2 = new Color(165,42,42);
-                break;
-            case "RED":  color2 = Color.RED;
-                break;
-            case "YELLOW": color2 = Color.YELLOW;
-                break;
-            case "BLUE": color2 = Color.BLUE;
-                break;
-            case "BLACK": color2 = Color.BLACK;
-                break;
-            case "WHITE": color2 = Color.WHITE;
-                break;
-        }
+        return color;
+    }
+
+    void setSquaresColor(String sColor1, String sColor2){
+        Color color1 = makeColor(sColor1);
+
+        Color color2 = makeColor(sColor2);
 
         for (int i = 0; i < 8; i++){
             for (int j = 0; j < 8; j++){
@@ -236,66 +225,25 @@ public class SahView extends JFrame{
     }
 
     void setChessmanColor(String sColor1, String sColor2){
-        Color color1 = new Color(205,133,63);
-        switch (sColor1){
-            case "DARK GREY": color1 = Color.DARK_GRAY;
-                break;
-            case "LIGHT GREY": color1 = Color.LIGHT_GRAY;
-                break;
-            case "BEIGE": color1 = new Color(205,133,63);
-                break;
-            case  "BROWN": color1 = new Color(165,42,42);
-                break;
-            case "RED":  color1 = Color.RED;
-                break;
-            case "YELLOW": color1 = Color.YELLOW;
-                break;
-            case "BLUE": color1 = Color.BLUE;
-                break;
-            case "BLACK": color1 = Color.BLACK;
-                break;
-            case "WHITE": color1 = Color.WHITE;
-                break;
-        }
-
-        Color color2 = new Color(205,133,63);
-        switch (sColor2){
-            case "DARK GREY": color2 = Color.DARK_GRAY;
-                break;
-            case "LIGHT GREY": color2 = Color.LIGHT_GRAY;
-                break;
-            case "BEIGE": color2 = new Color(205,133,63);
-                break;
-            case  "BROWN": color2 = new Color(165,42,42);
-                break;
-            case "RED":  color2 = Color.RED;
-                break;
-            case "YELLOW": color2 = Color.YELLOW;
-                break;
-            case "BLUE": color2 = Color.BLUE;
-                break;
-            case "BLACK": color2 = Color.BLACK;
-                break;
-            case "WHITE": color2 = Color.WHITE;
-                break;
-        }
+        Color color1 = makeColor(sColor1);
+        Color color2 = makeColor(sColor2);
 
         for (int i = 0; i < 8; i++){
             for (int j = 0; j < 8; j++){
-                if (Chessman.tabla[i][j].getColor().equals("white")){
+                if (Chessman.table[i][j].getColor().equals("white")){
                     m_buttons[i][j].setForeground(color1);
-                } else if (Chessman.tabla[i][j].getColor().equals("black")){
+                } else if (Chessman.table[i][j].getColor().equals("black")){
                     m_buttons[i][j].setForeground(color2);
                 }
             }
         }
-
-
     }
 
     void setRemoved(){
-        white.setText(Chessman.getPieseAlbe().toString());
-        black.setText(Chessman.getPieseNegre().toString());
+        Collections.sort(Chessman.getWhitePieces());
+        Collections.sort(Chessman.getBlackPieces());
+        white.setText(Chessman.getWhitePieces().toString());
+        black.setText(Chessman.getBlackPieces().toString());
     }
 
     void showSettings(){
@@ -305,13 +253,13 @@ public class SahView extends JFrame{
     void reset(){
         for (int i = 0; i < 8; i++){
             for (int j = 0; j < 8; j++){
-                if (Chessman.tabla[i][j].getColor().equals("white")) {
+                if (Chessman.table[i][j].getColor().equals("white")) {
                     m_buttons[i][j].setForeground(Color.WHITE);
                 }
                 else{
                     m_buttons[i][j].setForeground(Color.BLACK);
                 }
-                m_buttons[i][j].setText(Chessman.tabla[i][j].getNume());
+                m_buttons[i][j].setText(Chessman.table[i][j].getName());
             }
         }
         title.setText("WHITE TURN");
@@ -349,7 +297,7 @@ public class SahView extends JFrame{
         this.title.setText(title);
     }
 
-    public class BackgroundPanel extends JPanel{
+    public static class BackgroundPanel extends JPanel{
         Image img;
 
         void setImg(Image img){
@@ -361,21 +309,4 @@ public class SahView extends JFrame{
             g.drawImage(img, 0, 0, null);
         }
     }
-
-    /*public class MyButton extends JButton{
-        Image img;
-
-        public MyButton(String text) {
-            super(text);*
-        }
-
-        void setImg(Image img){
-            this.img = img;
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            g.drawImage(img, 0, 0, null);
-        }
-    }*/
 }
