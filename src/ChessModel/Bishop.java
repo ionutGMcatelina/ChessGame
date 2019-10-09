@@ -1,30 +1,26 @@
 package ChessModel;
 
 public class Bishop extends Chessman {
-    public Bishop(String color, int x, int y){
+    Bishop(String color, int x, int y){
         super(color, x, y);
-        setNume( "\u265D");
+        setName( "\u265D");
     }
 
     /**
-     * Verifica daca pozitia pe care urmeaza sa fie mutata piesa se afla pe diagonala principala
-     * din care face parte pozitia curenta.
-     * @param x Linia pozitiei de verificat.
-     * @param y Coloana pozitiei de verificat.
-     * @return True daca conditia este inceplinita, false in caz contrar.
+     * It checks if the main diagonal is free
      */
     private boolean freePd(int x, int y){
         int thisX = getX();
         if (x < thisX){
             for (int i = x + 1, j = y + 1; i < thisX; i++, j++){
-                if (!tabla[i][j].getColor().equals("gol")){
+                if (!table[i][j].getColor().equals("empty")){
                     return false;
                 }
             }
         }
         else{
             for (int i = x - 1, j = y - 1; i > thisX; i--, j--){
-                if (!tabla[i][j].getColor().equals("gol")){
+                if (!table[i][j].getColor().equals("empty")){
                     return false;
                 }
             }
@@ -33,24 +29,20 @@ public class Bishop extends Chessman {
     }
 
     /**
-     * Verifica daca pozitia pe care urmeaza sa fie mutata piesa se afla pe diagonala secundara
-     * din care face parte pozitia curenta.
-     * @param x Linia pozitiei de verificat.
-     * @param y Coloana pozitiei de verificat.
-     * @return True daca conditia este inceplinita, false in caz contrar.
+     * It checks if the secondary diagonal is free
      */
     private boolean freeSd(int x, int y){
         int thisX = getX();
         if (x < thisX){
             for (int i = x + 1, j = y - 1; i < thisX; i++, j--){
-                if (!tabla[i][j].getColor().equals("gol")){
+                if (!table[i][j].getColor().equals("empty")){
                     return false;
                 }
             }
         }
         else{
             for (int i = x - 1, j = y + 1; i > thisX; i--, j++){
-                if (!tabla[i][j].getColor().equals("gol")){
+                if (!table[i][j].getColor().equals("empty")){
                     return false;
                 }
             }
@@ -58,12 +50,6 @@ public class Bishop extends Chessman {
         return true;
     }
 
-    /**
-     * Muta piesa pe o alta pozitie.
-     * @param x Linia pe care va fi mutat.
-     * @param y Coloana pe care va fi mutat.
-     * @return True daca s-a putut face mutarea, false in caz contrar.
-     */
     @Override
     public boolean move(int x, int y) {
         if (Math.abs(x - getX()) == Math.abs(y - getY())){
@@ -72,7 +58,7 @@ public class Bishop extends Chessman {
                     return swap(x, y);
                 }
                 else{
-                    System.out.println("Mutare invalida!");
+                    System.out.println("Wrong move!");
                     return false;
                 }
             }
@@ -81,13 +67,13 @@ public class Bishop extends Chessman {
                     return swap(x, y);
                 }
                 else{
-                    System.out.println("Mutare invalida!");
+                    System.out.println("Wrong move!");
                     return false;
                 }
             }
         }
         else{
-            System.out.println("Mutare invalida!");
+            System.out.println("Wrong move!");
             return false;
         }
     }
