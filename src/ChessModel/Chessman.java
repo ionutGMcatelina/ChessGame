@@ -2,19 +2,19 @@ package ChessModel;
 
 import java.util.ArrayList;
 
-public abstract class Chessman {
+public abstract class Chessman implements Comparable<Chessman> {
     private String color;
-    private String nume;
+    private String name;
     private int x;
     private int y;
-    private static ArrayList<Chessman> pieseAlbe;
-    private static ArrayList<Chessman> pieseNegre;
-    public static Chessman[][] tabla;
+    private static ArrayList<Chessman> whitePieces;
+    private static ArrayList<Chessman> blackPieces;
+    public static Chessman[][] table;
 
     static{
-        pieseAlbe = new ArrayList<>();
-        pieseNegre = new ArrayList<>();
-        tabla = new Chessman[8][8];
+        whitePieces = new ArrayList<>();
+        blackPieces = new ArrayList<>();
+        table = new Chessman[8][8];
     }
 
     public Chessman(String color, int x, int y) {
@@ -23,70 +23,71 @@ public abstract class Chessman {
         this.y = y;
     }
 
-    public String getNume() {
-        return nume;
+    public String getName() {
+        return name;
     }
 
-    void setNume(String nume) {
-        this.nume = nume;
+    void setName(String name) {
+        this.name = name;
     }
 
     /**
-     * Muta piesa pe o pozitie noua. Practic mutarea se face printr-un swap
-     * intre piesa curenta si una goala, iar daca pe pozitia viitoare este o piesa
-     * adversa, aceasta va fi stearsa de pe tabla.
-     * @param x Linia pe care va fi mutata.
-     * @param y Coloana pe care va fi mutata.
-     * @return True daca s-a putut face mutarea, false in caz contrar.
+     * The method put the piece on the (x, y) position
+     * This method will be called from each class if the move respects the rules from that piece
      */
     boolean swap(int x, int y){
-        if (!tabla[x][y].getColor().equals(color)) {
-            if (x <= 7 && y <= 7) {
-                if (!tabla[x][y].getColor().equals("gol")){
-                    if (tabla[x][y].getColor().equals("black")){
-                        pieseNegre.add(tabla[x][y]);
+        if (!table[x][y].getColor().equals(color)) {
+            if (x <= 7 && y <= 7) { // This is because we cannot move where is a piece with the same color
+                if (!table[x][y].getColor().equals("gol")){
+                    if (table[x][y].getColor().equals("black")){
+                        whitePieces.add(table[x][y]);
                     }
                     else{
-                        pieseAlbe.add(tabla[x][y]);
+                        blackPieces.add(table[x][y]);
                     }
-                    tabla[x][y] = new Empty(x, y);
+                    table[x][y] = new Empty(x, y);
                 }
                 Chessman aux;
-                aux = tabla[x][y];
+                aux = table[x][y];
                 aux.setX(getX());
                 aux.setY(getY());
-                tabla[x][y] = tabla[getX()][getY()];
-                tabla[getX()][getY ()] = aux;
+                table[x][y] = table[getX()][getY()];
+                table[getX()][getY ()] = aux;
                 setX(x);
                 setY(y);
                 return true;
-            } else {
-                System.out.println("Mutare invalida!");
+            } else {        // This can be useless because in the GUI it is impossible to go out of the table
+                System.out.println("Wrong move!");
                 return false;
             }
         }
         else{
-            System.out.println("Mutare invalida!");
+            System.out.println("Wrong move!");
             return false;
         }
     }
 
     /**
-     * Muta piesa pe o pozitie anterioara.
-     * @param x Va fi linia pe care a fost piesa.
-     * @param y Va fi coloana pe care a fost piesa.
+     * It moves the piece in the previous position.
      */
     public void swapBack(int x, int y){
         Chessman aux;
-        aux = tabla[x][y];
+        aux = table[x][y];
         aux.setX(getX());
         aux.setY(getY());
-        tabla[x][y] = tabla[getX()][getY()];
-        tabla[getX()][getY ()] = aux;
+        table[x][y] = table[getX()][getY()];
+        table[getX()][getY ()] = aux;
         setX(x);
         setY(y);
     }
 
+    /**
+     * This abstract method moves the piece
+     * It is separate implemented in each class that inherits this class
+     * @param x The line of the next position
+     * @param y The column of the next position
+     * @return True if the move can be made,, false otherwise
+     */
     public abstract boolean move(int x, int y);
 
     public String getColor() {
@@ -101,29 +102,34 @@ public abstract class Chessman {
         return y;
     }
 
-    public static void reset(){
-        pieseAlbe.clear();
-        pieseNegre.clear();
+    static void reset(){
+        whitePieces.clear();
+        blackPieces.clear();
     }
 
-    public void setX(int x) {
+    void setX(int x) {
         this.x = x;
     }
 
-    public void setY(int y) {
+    void setY(int y) {
         this.y = y;
     }
 
-    public static ArrayList<Chessman> getPieseAlbe() {
-        return pieseAlbe;
+    public static ArrayList<Chessman> getWhitePieces() {
+        return whitePieces;
     }
 
-    public static ArrayList<Chessman> getPieseNegre() {
-        return pieseNegre;
+    public static ArrayList<Chessman> getBlackPieces() {
+        return blackPieces;
     }
 
     @Override
     public String toString(){
-        return " " + nume;
+        return " " + name;
+    }
+
+    @Override
+    public int compareTo(Chessman o) {
+        return this.name.compareTo(o.name);
     }
 }
