@@ -6,12 +6,12 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 /**
- * Clasa care reprezinta inerfata grafica.
- * Tabla de sah este formata dintr-o matrice de butoane care au ca text o piesa de sah sau nimic.
- * Mai sunt in plus butoane pentru:
- * - reset: reseteaza tabla de sah pentru a incepe un joc nou
- * - undo: face o mutare inapoi (nu trebuie apasat de mai multe ori la rand)
- * - settings: deschide o fereastra in care putem schimva aspectul interfetei.
+ * Here is the graphical user interface.
+ * The chess table is a matrix of buttons.
+ * Another buttons:
+ * - reset: reset the table for a new game
+ * - undo: it moves back the last moved piece (dont press it many times in a row)
+ * - settings: it open a window with settings for the appearance of the GUI
  */
 public class SahView extends JFrame{
     private JButton[][] m_buttons = new JButton[8][8];
