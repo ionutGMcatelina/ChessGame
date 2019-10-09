@@ -2,32 +2,29 @@ package ChessModel;
 
 public class Rook extends Chessman {
 
-    private boolean moved;
+    private boolean moved = false;
 
     Rook(String color, int x, int y){
         super(color, x, y);
-        setNume( "\u265C");
+        setName( "\u265C");
     }
 
     /**
-     * Verifica daca pozitia pe care urmeaza sa fie mutata piesa se afla pe aceeasi linie
-     * din care face parte pozitia curenta.
-     * @param x Linia pozitiei de verificat.
-     * @param y Coloana pozitiei de verificat.
-     * @return True daca conditia este inceplinita, false in caz contrar.
+     * It checks if all of the squares between current position and the next one are empty
+     * on that line.
      */
     private boolean freeX(int x, int y){
         int thisX = getX();
         if (x < thisX){
             for (int i = x + 1; i < thisX; i++){
-                if (!tabla[i][y].getColor().equals("gol")){
+                if (!table[i][y].getColor().equals("gol")){
                     return false;
                 }
             }
         }
-        else{
-            for (int i = thisX + 1; i < x; i++){
-                if (!tabla[i][y].getColor().equals("gol")){
+        else {
+            for (int i = thisX + 1; i < x; i++) {
+                if (!table[i][y].getColor().equals("gol")) {
                     return false;
                 }
             }
@@ -36,24 +33,21 @@ public class Rook extends Chessman {
     }
 
     /**
-     * Verifica daca pozitia pe care urmeaza sa fie mutata piesa se afla pe aceeasi coloana
-     * din care face parte pozitia curenta.
-     * @param x Linia pozitiei de verificat.
-     * @param y Coloana pozitiei de verificat.
-     * @return True daca conditia este inceplinita, false in caz contrar.
+     * It checks if all of the squares between current position and the next one are empty
+     * on that column.
      */
     private boolean freeY(int x, int y){
         int thisY = getY();
         if (y < thisY){
             for (int i = y + 1; i < thisY; i++){
-                if (!tabla[x][i].getColor().equals("gol")){
+                if (!table[x][i].getColor().equals("gol")){
                     return false;
                 }
             }
         }
         else{
             for (int i = thisY + 1; i < y; i++){
-                if (!tabla[x][i].getColor().equals("gol")){
+                if (!table[x][i].getColor().equals("gol")){
                     return false;
                 }
             }
@@ -62,10 +56,8 @@ public class Rook extends Chessman {
     }
 
     /**
-     * Muta piesa pe o alta pozitie.
-     * @param x Linia pe care va fi mutat.
-     * @param y Coloana pe care va fi mutat.
-     * @return True daca s-a putut face mutarea, false in caz contrar.
+     * This method checks if the next position is on the same line or the same column
+     * and if the methods freeX or freeY return true.
      */
     @Override
     public boolean move(int x, int y) {
@@ -77,12 +69,16 @@ public class Rook extends Chessman {
             return false;
         }
         else{
-            System.out.println("Mutare invalida!");
+            System.out.println("Wrong move!");
             return false;
         }
     }
 
-    public boolean isMoved() {
+    /**
+     * In some cases we can move the Rook just if id was not moved before (castling).
+     * This method tell us if this is the first move or not.
+     */
+    boolean isMoved() {
         return moved;
     }
 }
