@@ -1,58 +1,57 @@
 package ChessModel;
 
-public class King extends Chessman{
+/**
+ * The king
+ */
 
+public class King extends Chessman{
     private boolean moved;
     private boolean castling;
     private int threatX;
     private int threatY;
-    private boolean checkmate;
 
-    public King(String color, int x, int y) {
+    King(String color, int x, int y) {
         super(color, x, y);
-        checkmate = false;
         threatX = -1;
         threatY = -1;
         moved = false;
         castling = true;
-        setNume( "\u265A");
+        setName( "\u265A");
+    }
+
+    private boolean onTable(int x, int y){
+        return (x >= 0 && x < 8) && (y >= 0 && y <8);
     }
 
     /**
-     * Verifica daca o anumita pozitie de pe tabla este amenintata.
-     * Se iau toate pozitiile din care se poate ajunce pe acest patrat si se verifica daca este o piesa care sa ajunga
-     * aici. De exemplu pentru Queen si pentru Bishop se merge pe diagonalele din care face parte patratul, iar pentru
-     * Rook si tot pentru Queen se perge pe linie si pe coloana.
-     * @param x Linia pe care se afla patratul.
-     * @param y Coloana pe care se afla patratul.
-     * @param color Culoarea regelui pentru care se face verificarea.
-     * @param gol Boolean folosit pentru a lua cazul in care patratul trebuie sa fie gol sau nu.
-     * @return True daca patratul este amenintat de o piesa adversa, false in caz contrar.
+     * It checks if the position (x, y) is threatened.
+     * For example, for the queen and the Rook, it checks the line, column and the diagonals
+     * @param color the color of the king that should be moved here
+     * @param empty Boolean used to know if that position must be empty or not
      */
-    public boolean chess(int x, int y, String color, boolean gol) {
-        try {
-            if (Chessman.tabla[x][y].getColor().equals("gol") || !gol) {
+    public boolean chess(int x, int y, String color, boolean empty) {
+            if (onTable(x, y) && !Chessman.table[x][y].getColor().equals(color) || !empty) {
                 // KING
                 try{
-                    if (!tabla[x][y + 1].getColor().equals(color) && tabla[x][y + 1].getNume().equals("\u265A") ||
-                            !tabla[x + 1][y + 1].getColor().equals(color) && tabla[x][y + 1].getNume().equals("\u265A") ||
-                            !tabla[x + 1][y].getColor().equals(color) && tabla[x][y + 1].getNume().equals("\u265A") ||
-                            !tabla[x + 1][y - 1].getColor().equals(color) && tabla[x][y + 1].getNume().equals("\u265A") ||
-                            !tabla[x][y - 1].getColor().equals(color) && tabla[x][y + 1].getNume().equals("\u265A") ||
-                            !tabla[x - 1][y - 1].getColor().equals(color) && tabla[x][y + 1].getNume().equals("\u265A") ||
-                            !tabla[x - 1][y].getColor().equals(color) && tabla[x][y + 1].getNume().equals("\u265A") ||
-                            !tabla[x - 1][y + 1].getColor().equals(color) && tabla[x][y + 1].getNume().equals("\u265A")
+                    if (!table[x][y + 1].getColor().equals(color) && table[x][y + 1].getName().equals("\u265A") ||
+                            !table[x + 1][y + 1].getColor().equals(color) && table[x][y + 1].getName().equals("\u265A") ||
+                            !table[x + 1][y].getColor().equals(color) && table[x][y + 1].getName().equals("\u265A") ||
+                            !table[x + 1][y - 1].getColor().equals(color) && table[x][y + 1].getName().equals("\u265A") ||
+                            !table[x][y - 1].getColor().equals(color) && table[x][y + 1].getName().equals("\u265A") ||
+                            !table[x - 1][y - 1].getColor().equals(color) && table[x][y + 1].getName().equals("\u265A") ||
+                            !table[x - 1][y].getColor().equals(color) && table[x][y + 1].getName().equals("\u265A") ||
+                            !table[x - 1][y + 1].getColor().equals(color) && table[x][y + 1].getName().equals("\u265A")
                     ){
                         return true;
                     }
                 } catch (Exception e){
-                    System.out.println("Exception");
+                    System.out.println("Exceptionnn");
                 }
                 // QUEEN or ROOK
                 for (int i = x + 1; i < 8; i++) {
-                    if (!tabla[i][y].getColor().equals("gol")) {
-                        if (!tabla[i][y].getColor().equals(color) &&
-                                (tabla[i][y].getNume().equals("\u265B") || tabla[i][y].getNume().equals("\u265C"))) {
+                    if (!table[i][y].getColor().equals("gol")) {
+                        if (!table[i][y].getColor().equals(color) &&
+                                (table[i][y].getName().equals("\u265B") || table[i][y].getName().equals("\u265C"))) {
                             threatX = i;
                             threatY = y;
                             return true;
@@ -62,9 +61,9 @@ public class King extends Chessman{
                 }
 
                 for (int i = x - 1; i >= 0; i--) {
-                    if (!tabla[i][y].getColor().equals("gol")) {
-                        if (!tabla[i][y].getColor().equals(color) &&
-                                (tabla[i][y].getNume().equals("\u265B") || tabla[i][y].getNume().equals("\u265C"))) {
+                    if (!table[i][y].getColor().equals("gol")) {
+                        if (!table[i][y].getColor().equals(color) &&
+                                (table[i][y].getName().equals("\u265B") || table[i][y].getName().equals("\u265C"))) {
                             threatX = i;
                             threatY = y;
                             return true;
@@ -74,9 +73,9 @@ public class King extends Chessman{
                 }
 
                 for (int i = y + 1; i < 8; i++) {
-                    if (!tabla[x][i].getColor().equals("gol")) {
-                        if (!tabla[x][i].getColor().equals(color) &&
-                                (tabla[x][i].getNume().equals("\u265B") || tabla[x][i].getNume().equals("\u265C"))) {
+                    if (!table[x][i].getColor().equals("gol")) {
+                        if (!table[x][i].getColor().equals(color) &&
+                                (table[x][i].getName().equals("\u265B") || table[x][i].getName().equals("\u265C"))) {
                             threatX = x;
                             threatY = i;
                             return true;
@@ -85,9 +84,9 @@ public class King extends Chessman{
                     }
                 }
                 for (int i = y - 1; i >= 0; i--) {
-                    if (!tabla[x][i].getColor().equals("gol")) {
-                        if (!tabla[x][i].getColor().equals(color) &&
-                                (tabla[x][i].getNume().equals("\u265B") || tabla[x][i].getNume().equals("\u265C"))) {
+                    if (!table[x][i].getColor().equals("gol")) {
+                        if (!table[x][i].getColor().equals(color) &&
+                                (table[x][i].getName().equals("\u265B") || table[x][i].getName().equals("\u265C"))) {
                             threatX = x;
                             threatY = i;
                             return true;
@@ -98,9 +97,9 @@ public class King extends Chessman{
 
                 // QUEEN or BISHOP
                 for (int i = x + 1, j = y + 1; i < 8 && j < 8; i++, j++) {
-                    if (!tabla[i][j].getColor().equals("gol")) {
-                        if (!tabla[i][j].getColor().equals(color) &&
-                                (tabla[i][j].getNume().equals("\u265B") || tabla[i][j].getNume().equals("\u265D"))) {
+                    if (!table[i][j].getColor().equals("gol")) {
+                        if (!table[i][j].getColor().equals(color) &&
+                                (table[i][j].getName().equals("\u265B") || table[i][j].getName().equals("\u265D"))) {
                             threatX = i;
                             threatY = j;
                             return true;
@@ -109,9 +108,9 @@ public class King extends Chessman{
                     }
                 }
                 for (int i = x - 1, j = y - 1; i >= 0 && j >= 0; i--, j--) {
-                    if (!tabla[i][j].getColor().equals("gol")) {
-                        if (!tabla[i][j].getColor().equals(color) &&
-                                (tabla[i][j].getNume().equals("\u265B") || tabla[i][j].getNume().equals("\u265D"))) {
+                    if (!table[i][j].getColor().equals("gol")) {
+                        if (!table[i][j].getColor().equals(color) &&
+                                (table[i][j].getName().equals("\u265B") || table[i][j].getName().equals("\u265D"))) {
                             threatX = i;
                             threatY = j;
                             return true;
@@ -120,9 +119,9 @@ public class King extends Chessman{
                     }
                 }
                 for (int i = x + 1, j = y - 1; i < 8 && j >= 0; i++, j--) {
-                    if (!tabla[i][j].getColor().equals("gol")) {
-                        if (!tabla[i][j].getColor().equals(color) &&
-                                (tabla[i][j].getNume().equals("\u265B") || tabla[i][j].getNume().equals("\u265D"))) {
+                    if (!table[i][j].getColor().equals("gol")) {
+                        if (!table[i][j].getColor().equals(color) &&
+                                (table[i][j].getName().equals("\u265B") || table[i][j].getName().equals("\u265D"))) {
                             threatX = i;
                             threatY = j;
                             return true;
@@ -131,9 +130,9 @@ public class King extends Chessman{
                     }
                 }
                 for (int i = x - 1, j = y + 1; i >= 0 && j < 8; i--, j++) {
-                    if (!tabla[i][j].getColor().equals("gol")) {
-                        if (!tabla[i][j].getColor().equals(color) &&
-                                (tabla[i][j].getNume().equals("\u265B") || tabla[i][j].getNume().equals("\u265D"))) {
+                    if (!table[i][j].getColor().equals("gol")) {
+                        if (!table[i][j].getColor().equals(color) &&
+                                (table[i][j].getName().equals("\u265B") || table[i][j].getName().equals("\u265D"))) {
                             threatX = i;
                             threatY = j;
                             return true;
@@ -143,170 +142,107 @@ public class King extends Chessman{
                 }
 
                 // PAWN
-                if (!gol) {
+                if (!empty) {
                     if (color.equals("white")) {
-                        try {
-                            if (Chessman.tabla[x - 1][y - 1].getNume().equals("\u265F") && Chessman.tabla[x - 1][y - 1].getColor().equals("black")) {
-                                threatX = x - 1;
-                                threatY = y - 1;
-                                return true;
-                            }
-                        } catch (IndexOutOfBoundsException e) {
-                            System.out.println("IndexOutOfBoundsException");
+                        if (onTable(x - 1, y - 1) && Chessman.table[x - 1][y - 1].getName().equals("\u265F") && Chessman.table[x - 1][y - 1].getColor().equals("black")) {
+                            threatX = x - 1;
+                            threatY = y - 1;
+                            return true;
                         }
-                        try {
-                            if (Chessman.tabla[x - 1][y + 1].getNume().equals("\u265F") && Chessman.tabla[x - 1][y + 1].getColor().equals("black")) {
-                                threatX = x - 1;
-                                threatY = y + 1;
-                                return true;
-                            }
-                        } catch (IndexOutOfBoundsException e) {
-                            System.out.println("IndexOutOfBoundsException");
+                        if (onTable(x - 1, y + 1) && Chessman.table[x - 1][y + 1].getName().equals("\u265F") && Chessman.table[x - 1][y + 1].getColor().equals("black")) {
+                            threatX = x - 1;
+                            threatY = y + 1;
+                            return true;
                         }
-                    }
-
-                    if (color.equals("black")) {
-                        try {
-                            if (Chessman.tabla[x + 1][y - 1].getNume().equals("\u265F") && Chessman.tabla[x + 1][y - 1].getColor().equals("white")) {
-                                threatX = x + 1;
-                                threatY = y - 1;
-                                return true;
-                            }
-                        } catch (IndexOutOfBoundsException e) {
-                            System.out.println("IndexOutOfBoundsException");
+                    } else if (color.equals("black")) {
+                        if (onTable(x + 1, y - 1) && Chessman.table[x + 1][y - 1].getName().equals("\u265F") && Chessman.table[x + 1][y - 1].getColor().equals("white")) {
+                            threatX = x + 1;
+                            threatY = y - 1;
+                            return true;
                         }
-                        try {
-                            if (Chessman.tabla[x + 1][y + 1].getNume().equals("\u265F") && Chessman.tabla[x + 1][y + 1].getColor().equals("white")) {
-                                threatX = x + 1;
-                                threatY = y + 1;
-                                return true;
-                            }
-                        } catch (IndexOutOfBoundsException e) {
-                            System.out.println("IndexOutOfBoundsException");
+                        if (onTable(x + 1, y + 1) && Chessman.table[x + 1][y + 1].getName().equals("\u265F") && Chessman.table[x + 1][y + 1].getColor().equals("white")) {
+                            threatX = x + 1;
+                            threatY = y + 1;
+                            return true;
                         }
                     }
                 } else {
                     if (color.equals("white")) {
-                        try {
-                            if (Chessman.tabla[x - 1][y].getNume().equals("\u265F") && Chessman.tabla[x - 1][y].getColor().equals("black")) {
-                                threatX = x - 1;
-                                threatY = y - 1;
-                                return true;
-                            }
-                        } catch (IndexOutOfBoundsException e) {
-                            System.out.println("IndexOutOfBoundsException");
+                        if (onTable(x - 1, y) && Chessman.table[x - 1][y].getName().equals("\u265F") && Chessman.table[x - 1][y].getColor().equals("black")) {
+                            threatX = x - 1;
+                            threatY = y;
+                            return true;
                         }
                     }
 
                     if (color.equals("black")) {
-                        try {
-                            if (Chessman.tabla[x + 1][y].getNume().equals("\u265F") && Chessman.tabla[x + 1][y].getColor().equals("white")) {
-                                threatX = x + 1;
-                                threatY = y - 1;
-                                return true;
-                            }
-                        } catch (IndexOutOfBoundsException e) {
-                            System.out.println("IndexOutOfBoundsException");
+                        if (onTable(x + 1, y) && Chessman.table[x + 1][y].getName().equals("\u265F") && Chessman.table[x + 1][y].getColor().equals("white")) {
+                            threatX = x + 1;
+                            threatY = y;
+                            return true;
                         }
                     }
                 }
 
                 // KNIGHT
-                try {
-                    if (Chessman.tabla[x - 2][y - 1].getNume().equals("\u265E") && !Chessman.tabla[x - 2][y - 1].getColor().equals(getColor())) {
-                        threatX = x - 2;
-                        threatY = y - 1;
-                        return true;
-                    }
-                } catch (IndexOutOfBoundsException e) {
-                    System.out.println("IndexOutOfBoundsException");
+                if (onTable(x - 2, y - 1) && Chessman.table[x - 2][y - 1].getName().equals("\u265E") && !Chessman.table[x - 2][y - 1].getColor().equals(getColor())) {
+                    threatX = x - 2;
+                    threatY = y - 1;
+                    return true;
                 }
 
-                try {
-                    if (Chessman.tabla[x + 2][y - 1].getNume().equals("\u265E") && !Chessman.tabla[x + 2][y - 1].getColor().equals(getColor())) {
-                        threatX = x + 2;
-                        threatY = y - 1;
-                        return true;
-                    }
-                } catch (IndexOutOfBoundsException e) {
-                    System.out.println("IndexOutOfBoundsException");
+                if (onTable(x + 2, y - 1) && Chessman.table[x + 2][y - 1].getName().equals("\u265E") && !Chessman.table[x + 2][y - 1].getColor().equals(getColor())) {
+                    threatX = x + 2;
+                    threatY = y - 1;
+                    return true;
                 }
 
-                try {
-                    if (Chessman.tabla[x - 2][y + 1].getNume().equals("\u265E") && !Chessman.tabla[x - 2][y + 1].getColor().equals(getColor())) {
-                        threatX = x - 2;
-                        threatY = y + 1;
-                        return true;
-                    }
-                } catch (IndexOutOfBoundsException e) {
-                    System.out.println("IndexOutOfBoundsException");
+                if (onTable(x - 2, y + 1) && Chessman.table[x - 2][y + 1].getName().equals("\u265E") && !Chessman.table[x - 2][y + 1].getColor().equals(getColor())) {
+                    threatX = x - 2;
+                    threatY = y + 1;
+                    return true;
                 }
 
-                try {
-                    if (Chessman.tabla[x + 2][y + 1].getNume().equals("\u265E") && !Chessman.tabla[x + 2][y + 1].getColor().equals(getColor())) {
-                        threatX = x + 2;
-                        threatY = y + 1;
-                        return true;
-                    }
-                } catch (IndexOutOfBoundsException e) {
-                    System.out.println("IndexOutOfBoundsException");
+                if (onTable(x + 2, y + 1) && Chessman.table[x + 2][y + 1].getName().equals("\u265E") && !Chessman.table[x + 2][y + 1].getColor().equals(getColor())) {
+                    threatX = x + 2;
+                    threatY = y + 1;
+                    return true;
                 }
 
-                try {
-                    if (Chessman.tabla[x - 1][y - 2].getNume().equals("\u265E") && !Chessman.tabla[x - 1][y - 2].getColor().equals(getColor())) {
-                        threatX = x - 1;
-                        threatY = y - 2;
-                        return true;
-                    }
-                } catch (IndexOutOfBoundsException e) {
-                    System.out.println("IndexOutOfBoundsException");
+                if (onTable(x - 1, y - 2) && Chessman.table[x - 1][y - 2].getName().equals("\u265E") && !Chessman.table[x - 1][y - 2].getColor().equals(getColor())) {
+                    threatX = x - 1;
+                    threatY = y - 2;
+                    return true;
                 }
 
-                try {
-                    if (Chessman.tabla[x - 1][y + 2].getNume().equals("\u265E") && !Chessman.tabla[x - 1][y + 2].getColor().equals(getColor())) {
-                        threatX = x - 1;
-                        threatY = y + 2;
-                        return true;
-                    }
-                } catch (IndexOutOfBoundsException e) {
-                    System.out.println("IndexOutOfBoundsException");
+                if (onTable(x - 1, y + 2) && Chessman.table[x - 1][y + 2].getName().equals("\u265E") && !Chessman.table[x - 1][y + 2].getColor().equals(getColor())) {
+                    threatX = x - 1;
+                    threatY = y + 2;
+                    return true;
                 }
 
-                try {
-                    if (Chessman.tabla[x + 1][y - 2].getNume().equals("\u265E") && !Chessman.tabla[x + 1][y - 2].getColor().equals(getColor())) {
-                        threatX = x + 1;
-                        threatY = y - 2;
-                        return true;
-                    }
-                } catch (IndexOutOfBoundsException e) {
-                    System.out.println("IndexOutOfBoundsException");
+                if (onTable(x + 1, y - 2) && Chessman.table[x + 1][y - 2].getName().equals("\u265E") && !Chessman.table[x + 1][y - 2].getColor().equals(getColor())) {
+                    threatX = x + 1;
+                    threatY = y - 2;
+                    return true;
                 }
 
-                try {
-                    if (Chessman.tabla[x + 1][y + 2].getNume().equals("\u265E") && !Chessman.tabla[x + 1][y + 2].getColor().equals(getColor())) {
-                        threatX = x + 1;
-                        threatY = y + 2;
-                        return true;
-                    }
-                } catch (IndexOutOfBoundsException e) {
-                    System.out.println("IndexOutOfBoundsException");
+                if (onTable(x + 1, y + 2) && Chessman.table[x + 1][y + 2].getName().equals("\u265E") && !Chessman.table[x + 1][y + 2].getColor().equals(getColor())) {
+                    threatX = x + 1;
+                    threatY = y + 2;
+                    return true;
                 }
 
                 return false;
             }
-        } catch (IndexOutOfBoundsException e){
-            System.out.println("IndexOutOfBoundsException");
-        }
+        System.out.println(" HERE");
         return true;
     }
 
     /**
-     * Verifica daca este sah mat, adica daca toate casutele unde s-ar putea muta regele sunt in sah si daca nu se
-     * poate pune nimic in calea piesei care ameninta (ex. pe diagonala intre regina adversa si rege).
-     * @param x Linia pe care se afla regele.
-     * @param y Coloana pe care se afla regele.
-     * @param color Culoarea regelui.
-     * @return True daca este sah mat, false in caz contrar.
+     * It checks if its checkmate.
+     * The method use the chess method to verify if the behind squares are threatened or not
+     * @param color The color of the king
      */
 
     public boolean checkmate(int x, int y, String color){
@@ -343,7 +279,7 @@ public class King extends Chessman{
                 return false;
             }
 
-            if (threatX == x){
+            if (threatX == x){              // It checks if there are squares between the king and the threat that can be occupied
                 if (threatY < y) {
                     for (int i = threatY + 1; i < y; i++){
                         if (chess(threatX, i, "black", true) && color.equals("white") || chess(threatX, i, "white", true) && color.equals("black")){
@@ -409,22 +345,15 @@ public class King extends Chessman{
         return false;
     }
 
-    /**
-     * Muta piesa pe o alta pozitie. Metoda verifica si daca se poate face rocada,
-     * adica daca regele si tura au fost mutate si daca a fost aleasa pozitia buna.
-     * @param x Linia pe care va fi mutat.
-     * @param y Coloana pe care va fi mutat.
-     * @return True daca s-a putut face mutarea, false in caz contrar.
-     */
     @Override
     public boolean move(int x, int y) {
         if (!chess(x, y, getColor(), false)) {
             if (!moved) {
                 castling = false;
-                if (!((Rook) Chessman.tabla[getX()][getY() - 4]).isMoved() && (x == getX() && y == getY() - 2) &&
+                if (!((Rook) Chessman.table[getX()][getY() - 4]).isMoved() && (x == getX() && y == getY() - 2) &&
                         (!chess(x, getY() - 1, getColor(), false)) && (!chess(x, getY() - 2, getColor(), false)) && (!chess(x, getY() - 3, getColor(), false))) {
                     if (swap(x, y)) {
-                        if ((Chessman.tabla[x][y - 2]).swap(x, y + 1)) {
+                        if ((Chessman.table[x][y - 2]).swap(x, y + 1)) {
                             moved = true;
                             castling = true;
                             return true;
@@ -432,10 +361,10 @@ public class King extends Chessman{
                             return false;
                     }
                     return false;
-                } else if (!((Rook) Chessman.tabla[getX()][getY() + 3]).isMoved() && (x == getX() && y == getY() + 2)
+                } else if (!((Rook) Chessman.table[getX()][getY() + 3]).isMoved() && (x == getX() && y == getY() + 2)
                         && (!chess(x, getY() + 1, getColor(), false)) && (!chess(x, getY() + 2, getColor(), false))) {
                     if (swap(x, y)) {
-                        if ((Chessman.tabla[x][y + 1]).swap(x, y - 1)) {
+                        if ((Chessman.table[x][y + 1]).swap(x, y - 1)) {
                             moved = true;
                             castling = true;
                             return true;
@@ -453,7 +382,7 @@ public class King extends Chessman{
                 }
                 return false;
             } else {
-                System.out.println("Mutare invalida!");
+                System.out.println("Wrong move!");
                 return false;
             }
         }
