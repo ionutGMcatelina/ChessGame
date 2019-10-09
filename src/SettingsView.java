@@ -3,11 +3,10 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 /**
- * Reprezinta interfata grafica pentru schimbarea aspectului tablei de sah.
- * Se pot face umatoarele modificari:
+ * Settings for the appearance of the table:
  * - background
- * - culorile patratelor de pe tabla
- * - culoarea pieselor
+ * - squares color
+ * - pieces color
  */
 public class SettingsView extends JFrame {
     private JLabel settings = new JLabel("Settings");
